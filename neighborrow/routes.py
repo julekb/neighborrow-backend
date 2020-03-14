@@ -2,13 +2,19 @@
 from flask import current_app as app
 from flask import request
 
-from .models import db, Item
+from .models import db, Item, User
 
 
-prefix = '/items'
+@app.shell_context_processor
+def make_shell_context():
+    print('Welcome to (s)hell.')
+    return {'db': db, 'User': User, 'Item': Item}
 
 
-@app.route(prefix, methods=['GET', 'POST', 'DELETE'])
+items_prefix = '/items'
+
+
+@app.route(items_prefix, methods=['GET', 'POST', 'DELETE'])
 def items():
     if request.method == 'GET':
         items = Item.query.all()
@@ -43,3 +49,11 @@ def items():
         db.session.delete(item)
         db.session.commit()
         return f"Item {id} deleted."
+
+
+
+# users_prefix = '/users'
+# @app.route(users_prefix + '/user', methods=['GET', 'POST', 'DELETE', 'PATCH'])
+# def user():
+#     if request.method == 'GET':
+#
