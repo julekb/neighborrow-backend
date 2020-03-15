@@ -22,7 +22,8 @@ def items():
             {
                 "pk": item.id,
                 "name": item.name,
-                "price": item.price
+                "price": item.price,
+                "owner": item.owner.first_name if item.owner else ''
             } for item in items
         ]
         return {"items": out}
