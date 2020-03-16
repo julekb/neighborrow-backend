@@ -3,9 +3,8 @@ import datetime as dt
 from . import db
 
 from flask_login import UserMixin
-from werkzeug.security import generate_password_hash, check_password_hash
-
 from sqlalchemy.orm import relationship
+from werkzeug.security import generate_password_hash, check_password_hash
 
 
 class User(UserMixin, db.Model):
