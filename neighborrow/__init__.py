@@ -13,10 +13,12 @@ def create_app():
     app = Flask(__name__, instance_relative_config=False)
     app.config.from_object(os.environ['APP_SETTINGS'])
     db.init_app(app)
+    migrate = Migrate(app, db)    
     login_manager = LoginManager()
-    migrate = Migrate(app, db)
+
 
     with app.app_context():
         from . import routes
-        db.create_all()
+
+        # db.create_all()
         return app
