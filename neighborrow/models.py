@@ -18,8 +18,8 @@ class User(UserMixin, db.Model):
     __tablename__ = 'users'
 
     id = db.Column(db.Integer, primary_key=True)
-    first_name = db.Column(db.String())
-    last_name = db.Column(db.String())
+    first_name = db.Column(db.String(32))
+    last_name = db.Column(db.String(32))
     password = db.Column(db.String(200),
                          primary_key=False,
                          unique=False,
@@ -41,7 +41,8 @@ class Item(db.Model):
     __tablename__ = 'items'
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String())
+    name = db.Column(db.String(32))
+    description = db.Column(db.String(1024))
     price = db.Column(db.Integer())
     added_date = db.Column(db.DateTime, default=dt.datetime.utcnow())
 
