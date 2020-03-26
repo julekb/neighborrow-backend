@@ -50,16 +50,3 @@ def items():
         db.session.delete(item)
         db.session.commit()
         return f"Item {id} deleted."
-
-
-rental_prefix = '/rental'
-# @app.route(rental_prefix, methods=['GET', 'CREATE', 'PATCH'])
-# def rent
-
-
-
-# users_prefix = '/users'
-# @app.route(users_prefix + '/user', methods=['GET', 'POST', 'DELETE', 'PATCH'])
-# def user():
-#     if request.method == 'GET':
-#

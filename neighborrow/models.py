@@ -8,6 +8,16 @@ from passlib.hash import pbkdf2_sha256 as sha256
 from sqlalchemy.orm import relationship
 
 
+class RevokedToken(NModel):
+    __tablename__ = 'revoked_tokens'
+    id = db.Column(db.Integer, primary_key=True)
+    jti = db.Column(db.String(200))
+
+    @classmethod
+    def is_jti_blacklisted(cls, jti):
+        return bool(cls.query.filter_by(jti=jti).scalar is None)
+
+
 class User(NModel,
            UserMixin,
            TimestampMixin):
@@ -44,6 +54,7 @@ class User(NModel,
 
 
 class Location(NModel):
+    __tablename__ = 'locations'
     id = db.Column(db.Integer, primary_key=True)
     addres = db.Column(db.String(1024))
 

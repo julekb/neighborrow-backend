@@ -7,8 +7,6 @@ class Config():
     DEBUG = False
     TESTING = False
     CSRF_ENABLED = True
-    SECRET_KEY = 'this-really-needs-to-be-changed'
-    JTW_SECRET_KEY = 'this-also-needs-to-be-changed'
 
 
 class ProductionConfig(Config):
@@ -26,6 +24,12 @@ class DevelopmentConfig(Config):
     SQLALCHEMY_DATABASE_URI = "postgresql://neighborrow:pass@localhost:5432/neighborrow"
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_ECHO = False  # set true to log db access
+
+    SECRET_KEY = 'this-really-needs-to-be-changed'
+
+    JTW_SECRET_KEY = 'this-also-needs-to-be-changed'
+    JWT_BLACKLIST_ENABLED = True
+    JWT_BLACKLIST_TOKEN_CHECKS = ['access', 'refresh']
 
 
 class TestingConfig(Config):

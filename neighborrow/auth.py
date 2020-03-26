@@ -1,11 +1,7 @@
-from flask import current_app as app
-from flask import request
-
 from flask_jwt_extended import (create_access_token, create_refresh_token, jwt_required, jwt_refresh_token_required, get_jwt_identity, get_raw_jwt)
 from flask_restful import Resource, reqparse
 
-from . import db
-from .models import User
+from .models import User, RevokedToken
 
 
 signup_parser = reqparse.RequestParser()
@@ -59,41 +55,32 @@ class UserLogin(Resource):
 
 
 class UserLogoutAccess(Resource):
+    @jwt_required
     def post(self):
-        return {'message': 'User logout'}
+        jti = get_raw_jwt()['jti']
+        try:
+            revoked_token = RevokedToken(jti=jti)
+            revoked_token.save_to_db()
+            return {'message': 'Access token has been revoked.'}
+        except:
+            return {'message': 'Something went wrong.'}, 500
 
 
 class UserLogoutRefresh(Resource):
+    @jwt_refresh_token_required
     def post(self):
-        return {'message': 'User logout'}
+        jti = get_raw_jwt()['jti']
+        try:
+            revoked_token = RevokedToken(jti=jti)
+            revoked_token.save_to_db()
+            return {'message': 'Refresh token has been revoked.'}
+        except:
+            return {'message': 'Something went wrong.'}, 500
 
 
 class TokenRefresh(Resource):
+    @jwt_refresh_token_required
     def post(self):
-        return {'message': 'Token refresh'}
-
-
-class SecretResource(Resource):
-    def get(self):
-        return {
-            'answer': 42
-        }
-# class UserSignupView(Resource)
-# def get(self):
-#         return
-#
-# class LoginView(Resource):
-#     def post(self):
-#         first_name = request.json.get('first_name')
-#         last_name = request.json.get('last_name')
-#         email = request.json.get('email')
-#         password = request.json.get('password')
-#         phone = request.json.get('password')
-#
-#         if not (first_name or last_name or password or phone or email):
-#             raise
-#
-#         user = User(first_name=first_name, last_name=last_name, email=email, phone=phone)
-#         user.set_password(password)
-#         db.session.add(user)
-#         db.session.commit()
+        user = get_jwt_identity()
+        access_token = create_access_token(identity=user)
+        return {'access_token': access_token}

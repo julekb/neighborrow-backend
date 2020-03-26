@@ -20,7 +20,13 @@ def create_app():
     db.init_app(app)
     migrate = Migrate(app, db)
     login_manager = LoginManager()
-    jtw = JWTManager(app)
+    jwt = JWTManager(app)
+    from .models import RevokedToken
+    
+    @jwt.token_in_blacklist_loader
+    def check_if_token_in_blacklist(decrypted_token):
+        jti = decrypted_token['jti']
+        return RevokedToken.is_jti_blacklisted(jti)
 
     with app.app_context():
         from . import auth
@@ -32,5 +38,4 @@ def create_app():
         api.add_resource(auth.UserLogoutAccess, users_prefix + '/logout/access')
         api.add_resource(auth.UserLogoutRefresh, users_prefix + '/logout/refresh')
         api.add_resource(auth.TokenRefresh, users_prefix + '/token/refresh')
-        api.add_resource(auth.SecretResource, users_prefix + '/secret')
         return app
