@@ -1,0 +1,6 @@
+1. Query or manager on NModel with exists() class method
+2. permissions
+3. Responses
+4. define base error class
+5. create testing env
+6. ViewSets, Views?
