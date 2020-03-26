@@ -1,8 +1,11 @@
 # Create database
 
 * install PostgreSQL and open `sudo su -postgres`
+* install PostGIS, i.e. with `brew install postgis`
 * `create database neighborrow;`
 * `create user neighborrow with superuser password 'pass';`
+* Install extensions
+`create extension postgis;`
 *
 
 
