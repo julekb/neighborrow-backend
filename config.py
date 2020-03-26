@@ -8,6 +8,7 @@ class Config():
     TESTING = False
     CSRF_ENABLED = True
     SECRET_KEY = 'this-really-needs-to-be-changed'
+    JTW_SECRET_KEY = 'this-also-needs-to-be-changed'
 
 
 class ProductionConfig(Config):

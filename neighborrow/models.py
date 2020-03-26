@@ -1,13 +1,16 @@
 import datetime as dt
 
 from . import db
+from .core import NModel, TimestampMixin
 
 from flask_login import UserMixin
+from passlib.hash import pbkdf2_sha256 as sha256
 from sqlalchemy.orm import relationship
-from werkzeug.security import generate_password_hash, check_password_hash
 
 
-class User(UserMixin, db.Model):
+class User(NModel,
+           UserMixin,
+           TimestampMixin):
     """
     From UserMixin:
     - is_authenticated
@@ -18,26 +21,34 @@ class User(UserMixin, db.Model):
     __tablename__ = 'users'
 
     id = db.Column(db.Integer, primary_key=True)
-    first_name = db.Column(db.String(32))
-    last_name = db.Column(db.String(32))
+    first_name = db.Column(db.String(32), nullable=False)
+    last_name = db.Column(db.String(32), nullable=False)
     password = db.Column(db.String(200),
                          primary_key=False,
                          unique=False,
                          nullable=False)
 
+    email = db.Column(db.String(64), unique=True, nullable=False)
     phone = db.Column(db.Integer)
 
     items = relationship('Item', back_populates='owner')
     rented = relationship('Item', secondary='rentals')
 
-    def set_password(self, password):
-        self.password = generate_password_hash(password, method='sha256')
+    @staticmethod
+    def generate_hash(password):
+        return sha256.hash(password)
 
-    def check_password(self, password):
-        return check_password_hash(self.password, password)
+    @staticmethod
+    def verify_hash(password, hash):
+        return sha256.verify(password, hash)
 
 
-class Item(db.Model):
+class Location(NModel):
+    id = db.Column(db.Integer, primary_key=True)
+    addres = db.Column(db.String(1024))
+
+
+class Item(NModel, TimestampMixin):
     __tablename__ = 'items'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -58,7 +69,7 @@ class Item(db.Model):
         return "Item {}".format(self.name)
 
 
-class Rental(db.Model):
+class Rental(NModel):
     __tablename__ = 'rentals'
 
     id = db.Column(db.Integer, primary_key=True)

@@ -1,0 +1,17 @@
+import datetime as dt
+
+from . import db
+
+
+class TimestampMixin:
+    created = db.Column(db.DateTime, nullable=False, default=dt.datetime.utcnow, server_default=str(dt.datetime.utcnow()))
+    updated = db.Column(db.DateTime, onupdate=dt.datetime.utcnow)
+
+
+class NModel(db.Model):
+    __abstract__ = True
+
+    def save_to_db(self):
+        db.session.add(self)
+        db.session.commit()
+        return self
