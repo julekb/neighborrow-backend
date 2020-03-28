@@ -4,3 +4,7 @@
 4. define base error class
 5. create testing env
 6. ViewSets, Views?
+7. Flask-logger ?
+8. <Rule '/static/<filename>' (GET, OPTIONS, HEAD) -> static>]) how does it work?
+9. Blueprints
+10. smarter data serialization

@@ -15,7 +15,7 @@ login_parser.add_argument('email', help='This field annot be blank.', required=T
 login_parser.add_argument('password', help='This field cannot be blank.', required=True)
 
 
-class UserSignUp(Resource):
+class UserSignUpView(Resource):
     def post(self):
         data = signup_parser.parse_args()
         password = data.pop('password')
@@ -35,7 +35,7 @@ class UserSignUp(Resource):
             return 'Ups, something went wrong. ()'.format(str(e)), 500
 
 
-class UserLogin(Resource):
+class UserLoginView(Resource):
     def post(self):
         data = login_parser.parse_args()
         user = User.query.filter_by(email=data['email']).first()
@@ -54,7 +54,7 @@ class UserLogin(Resource):
         return 'Incorrect password.'
 
 
-class UserLogoutAccess(Resource):
+class UserLogoutAccessView(Resource):
     @jwt_required
     def post(self):
         jti = get_raw_jwt()['jti']
@@ -66,7 +66,7 @@ class UserLogoutAccess(Resource):
             return {'message': 'Something went wrong.'}, 500
 
 
-class UserLogoutRefresh(Resource):
+class UserLogoutRefreshView(Resource):
     @jwt_refresh_token_required
     def post(self):
         jti = get_raw_jwt()['jti']
@@ -78,7 +78,7 @@ class UserLogoutRefresh(Resource):
             return {'message': 'Something went wrong.'}, 500
 
 
-class TokenRefresh(Resource):
+class TokenRefreshView(Resource):
     @jwt_refresh_token_required
     def post(self):
         user = get_jwt_identity()
