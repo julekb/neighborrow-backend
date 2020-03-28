@@ -8,3 +8,4 @@
 8. <Rule '/static/<filename>' (GET, OPTIONS, HEAD) -> static>]) how does it work?
 9. Blueprints
 10. smarter data serialization
+11. organize migration files names so they make sense

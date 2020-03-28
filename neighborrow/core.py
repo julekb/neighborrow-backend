@@ -5,7 +5,7 @@ from . import db
 
 class TimestampMixin:
     created = db.Column(db.DateTime, nullable=False, default=dt.datetime.utcnow, server_default=str(dt.datetime.utcnow()))
-    updated = db.Column(db.DateTime, onupdate=dt.datetime.utcnow)
+    modified = db.Column(db.DateTime, onupdate=dt.datetime.utcnow)
 
 
 class NModel(db.Model):

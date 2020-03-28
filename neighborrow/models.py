@@ -44,6 +44,9 @@ class User(NModel,
     items = relationship('Item', back_populates='owner')
     rented = relationship('Item', secondary='rentals')
 
+    def __repr__(self, *args, **kwargs):
+        return f'User {self.id}: {self.first_name} {self.last_name}'
+
     @staticmethod
     def generate_hash(password):
         return sha256.hash(password)
@@ -77,7 +80,7 @@ class Item(NModel, TimestampMixin):
         self.price = price
 
     def __repr__(self):
-        return "Item {}".format(self.name)
+        return f"Item {self.name}"
 
 
 class Rental(NModel):

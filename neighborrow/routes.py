@@ -3,7 +3,7 @@ from flask import current_app as app
 
 from flask_restful import Api
 
-from .auth import UserSignUpView, UserLoginView, UserLogoutAccessView, UserLogoutRefreshView, TokenRefreshView
+from .auth import UserSignUpView, UserLoginView, UserLogoutAccessView, UserLogoutRefreshView, TokenRefreshView, LocationView
 from .views import ItemView
 
 api = Api(app)
@@ -17,3 +17,6 @@ api.add_resource(TokenRefreshView, users_prefix + '/refresh-token')
 
 items_prefix = '/items'
 api.add_resource(ItemView, items_prefix + '')
+
+locations_prefix = '/locations'
+api.add_resource(LocationView, users_prefix + '')

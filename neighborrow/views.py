@@ -1,10 +1,9 @@
 from flask import current_app as app
-from flask import request
 
 from flask_jwt_extended import jwt_refresh_token_required, get_jwt_identity
 from flask_restful import Resource, reqparse
 
-from .models import db, Item, User
+from .models import db, Item, User, Location
 
 
 def get_user():
@@ -30,12 +29,15 @@ class ItemView(Resource):
         data = item_parser.parse_args()
         obj = Item(**data)
         obj.save_to_db()
+        user.items.append(obj)
+        user.save_to_db()
 
         items = Item.query.all()
         out = [
             {
-                "pk": item.id,
+                "id": item.id,
                 "name": item.name,
+                "owner": item.owner.id if item.owner else '',
                 "price": item.price
             } for item in items
         ]
@@ -45,10 +47,25 @@ class ItemView(Resource):
         items = Item.query.all()
         out = [
             {
-                "pk": item.id,
+                "id": item.id,
                 "name": item.name,
+                "created": str(item.created),
+                "modified": str(item.modified),
                 "price": item.price,
                 "owner": item.owner.first_name if item.owner else ''
             } for item in items
         ]
         return {"items": out}
+
+
+class LocationView(Resource):
+    @jwt_refresh_token_required
+    def get(self):
+        locations = Location.query.all()
+        out = [
+            {
+                "id": location.id,
+                "address": location.address
+            } for location in locations
+        ]
+        return out
