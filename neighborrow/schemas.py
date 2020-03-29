@@ -20,3 +20,8 @@ class ItemSchema(ma.Schema):
         ordered = True
 
     owner = fields.Nested(PublicUserSchema)
+
+
+class LocationSchema(ma.Schema):
+    class Meta:
+        fields = ('id', 'address')

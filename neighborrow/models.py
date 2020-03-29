@@ -59,7 +59,7 @@ class User(NModel,
 class Location(NModel):
     __tablename__ = 'locations'
     id = db.Column(db.Integer, primary_key=True)
-    addres = db.Column(db.String(1024))
+    address = db.Column(db.String(1024))
 
 
 class Item(NModel, TimestampMixin):
