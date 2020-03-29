@@ -3,12 +3,13 @@ import os
 from flask import Flask
 
 from flask_jwt_extended import JWTManager
-from flask_sqlalchemy import SQLAlchemy
+from flask_marshmallow import Marshmallow
 from flask_migrate import Migrate
-from flask_login import LoginManager
+from flask_sqlalchemy import SQLAlchemy
 
 
 db = SQLAlchemy()
+ma = Marshmallow()
 
 
 def create_app():
@@ -17,6 +18,7 @@ def create_app():
     app.config.from_object(os.environ['APP_SETTINGS'])
     db.init_app(app)
     migrate = Migrate(app, db)
+    ma.init_app(app)
     # login_manager = LoginManager()
     jwt = JWTManager(app)
     from .models import RevokedToken

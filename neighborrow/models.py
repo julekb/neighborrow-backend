@@ -82,6 +82,10 @@ class Item(NModel, TimestampMixin):
     def __repr__(self):
         return f"Item {self.name}"
 
+    @property
+    def is_available(self):
+        return True
+
 
 class Rental(NModel):
     __tablename__ = 'rentals'

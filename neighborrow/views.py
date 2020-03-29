@@ -4,6 +4,7 @@ from flask_jwt_extended import jwt_refresh_token_required, get_jwt_identity
 from flask_restful import Resource, reqparse
 
 from .models import db, Item, User, Location
+from .schemas import UserSchema, ItemSchema
 
 
 def get_user():
@@ -25,29 +26,15 @@ item_parser.add_argument('price', required=True)
 class ItemView(Resource):
     def get(self, id):
         obj = Item.query.filter_by(id=id).one()
-        out = {
-            "id": obj.id,
-            "name": obj.name,
-            "owner": obj.owner.id if obj.owner else '',
-            "price": obj.price
-        }
+        out = ItemSchema().dump(obj)
         return out
 
 
 class ItemListView(Resource):
     def get(self):
         items = Item.query.all()
-        out = [
-            {
-                "id": item.id,
-                "name": item.name,
-                "created": str(item.created),
-                "modified": str(item.modified),
-                "price": item.price,
-                "owner": item.owner.first_name if item.owner else ''
-            } for item in items
-        ]
-        return {"items": out}
+        out = ItemSchema(many=True).dump(items)
+        return out
 
     @jwt_refresh_token_required
     def post(self, id):
@@ -58,16 +45,8 @@ class ItemListView(Resource):
         user.items.append(obj)
         user.save_to_db()
 
-        items = Item.query.all()
-        out = [
-            {
-                "id": item.id,
-                "name": item.name,
-                "owner": item.owner.id if item.owner else '',
-                "price": item.price
-            } for item in items
-        ]
-        return {"items": out}
+        out = ItemSchema().dump(obj)
+        return out
 
 
 class LocationView(Resource):
