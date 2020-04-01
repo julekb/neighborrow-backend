@@ -4,6 +4,7 @@ from . import db
 from .core import NModel, TimestampMixin
 
 from flask_login import UserMixin
+from geoalchemy2 import Geometry
 from passlib.hash import pbkdf2_sha256 as sha256
 from sqlalchemy.orm import relationship
 
@@ -59,6 +60,7 @@ class User(NModel,
 class Location(NModel):
     __tablename__ = 'locations'
     id = db.Column(db.Integer, primary_key=True)
+    geom = db.Column(Geometry(geometry_type='POINT', srid=4326))
     address = db.Column(db.String(1024))
 
 

@@ -6,7 +6,6 @@ certifi==2019.11.28
 chardet==3.0.4
 Click==7.0
 decorator==4.4.2
-Flask==1.1.1
 Flask-JWT-Extended==3.24.1
 Flask-Login==0.5.0
 flask-marshmallow==0.11.0
@@ -14,9 +13,11 @@ Flask-Migrate==2.5.2
 Flask-RESTful==0.3.8
 flask-shell-ipython==0.4.1
 Flask-SQLAlchemy==2.4.1
+Flask==1.1.1
+GeoAlchemy2==0.7.0
 idna==2.8
-ipython==7.13.0
 ipython-genutils==0.2.0
+ipython==7.13.0
 itsdangerous==1.1.0
 jedi==0.16.0
 Jinja2==2.11.1
