@@ -19,4 +19,4 @@ api.add_resource(ItemView, items_prefix + '/<int:id>')
 api.add_resource(ItemListView, items_prefix + '')
 
 locations_prefix = '/locations'
-api.add_resource(LocationView, users_prefix + '')
+api.add_resource(LocationView, locations_prefix + '')

@@ -4,7 +4,7 @@ from flask_jwt_extended import jwt_refresh_token_required, get_jwt_identity
 from flask_restful import Resource, reqparse
 
 from .models import db, Item, User, Location
-from .schemas import UserSchema, ItemSchema
+from .schemas import ItemSchema, LocationSchema
 
 
 def get_user():
@@ -15,12 +15,17 @@ def get_user():
 @app.shell_context_processor
 def make_shell_context():
     print('Welcome to (s)hell.')
-    return {'db': db, 'User': User, 'Item': Item}
+    return {'db': db, 'User': User, 'Item': Item, 'Location': Location}
 
 
 item_parser = reqparse.RequestParser()
 item_parser.add_argument('name', required=True)
 item_parser.add_argument('price', required=True)
+
+location_parser = reqparse.RequestParser()
+location_parser.add_argument('address', required=True)
+location_parser.add_argument('lon', required=True)
+location_parser.add_argument('lat', required=True)
 
 
 class ItemView(Resource):
@@ -37,7 +42,7 @@ class ItemListView(Resource):
         return out
 
     @jwt_refresh_token_required
-    def post(self, id):
+    def post(self):
         user = get_user()
         data = item_parser.parse_args()
         obj = Item(**data)
@@ -59,4 +64,12 @@ class LocationView(Resource):
                 "address": location.address
             } for location in locations
         ]
+        return out
+
+    def post(self):
+        data = location_parser.parse_args()
+        obj = Location(**data)
+        obj.save_to_db()
+
+        out = LocationSchema().dump(obj)
         return out

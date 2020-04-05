@@ -5,6 +5,8 @@ from .core import NModel, TimestampMixin
 
 from flask_login import UserMixin
 from geoalchemy2 import Geometry
+from geoalchemy2.elements import WKTElement
+from geoalchemy2.shape import to_shape
 from passlib.hash import pbkdf2_sha256 as sha256
 from sqlalchemy.orm import relationship
 
@@ -62,6 +64,17 @@ class Location(NModel):
     id = db.Column(db.Integer, primary_key=True)
     geom = db.Column(Geometry(geometry_type='POINT', srid=4326))
     address = db.Column(db.String(1024))
+
+    def __init__(self, lon, lat, *args, **kwargs):
+        geom = WKTElement('POINT(%s %s)' % (lon, lat), srid=4326)
+        kwargs['geom'] = geom
+
+        return super(Location, self).__init__(*args, **kwargs)
+
+    @property
+    def coords(self):
+        point = to_shape(self.geom)
+        return [point.x, point.y]
 
 
 class Item(NModel, TimestampMixin):

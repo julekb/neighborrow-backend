@@ -24,4 +24,8 @@ class ItemSchema(ma.Schema):
 
 class LocationSchema(ma.Schema):
     class Meta:
-        fields = ('id', 'address')
+        fields = ('id', 'address', 'lon', 'lat', 'coords')
+        ordered = True
+
+    lon = fields.Float()
+    lon = fields.Float()
