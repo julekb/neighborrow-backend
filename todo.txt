@@ -3,11 +3,12 @@
 3. Responses
 4. define base error class
 5. create testing env
-6. ViewSets, Views?
+6. ViewSets and routing
 7. Flask-logger ?
 8. <Rule '/static/<filename>' (GET, OPTIONS, HEAD) -> static>]) how does it work?
 9. Blueprints
-10. smarter data serialization
 11. organize migration files names so they make sense
 12. documentation
 13. fix python project structure
+14. reorganize into application-based structure
+15. schema validation

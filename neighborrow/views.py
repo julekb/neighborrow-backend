@@ -1,10 +1,11 @@
 from flask import current_app as app
+from flask import request
 
 from flask_jwt_extended import jwt_refresh_token_required, get_jwt_identity
 from flask_restful import Resource, reqparse
 
 from .models import db, Item, User, Location
-from .schemas import ItemSchema, LocationSchema
+from .schemas import UserSchema, ItemSchema, LocationSchema
 
 
 def get_user():
@@ -18,14 +19,17 @@ def make_shell_context():
     return {'db': db, 'User': User, 'Item': Item, 'Location': Location}
 
 
-item_parser = reqparse.RequestParser()
-item_parser.add_argument('name', required=True)
-item_parser.add_argument('price', required=True)
-
 location_parser = reqparse.RequestParser()
 location_parser.add_argument('address', required=True)
 location_parser.add_argument('lon', required=True)
 location_parser.add_argument('lat', required=True)
+
+
+class UserSelfView(Resource):
+    @jwt_refresh_token_required
+    def get(self):
+        user = get_user()
+        return UserSchema().dump(user)
 
 
 class ItemView(Resource):
@@ -44,32 +48,32 @@ class ItemListView(Resource):
     @jwt_refresh_token_required
     def post(self):
         user = get_user()
-        data = item_parser.parse_args()
-        obj = Item(**data)
-        obj.save_to_db()
+        schema = ItemSchema()
+        data = request.get_json(force=True)
+        obj = schema.load(data).save_to_db()
         user.items.append(obj)
         user.save_to_db()
 
-        out = ItemSchema().dump(obj)
+        out = schema.dump(obj)
         return out
 
 
 class LocationView(Resource):
-    @jwt_refresh_token_required
     def get(self):
         locations = Location.query.all()
-        out = [
-            {
-                "id": location.id,
-                "address": location.address
-            } for location in locations
-        ]
+        out = LocationSchema(many=True).dump(locations)
         return out
 
     def post(self):
-        data = location_parser.parse_args()
-        obj = Location(**data)
-        obj.save_to_db()
+        data = request.get_json(force=True)
+        schema = LocationSchema()
+        obj = schema.load(data).save_to_db()
 
         out = LocationSchema().dump(obj)
         return out
+
+
+class LocationDetailView(Resource):
+    def get(self, id):
+        obj = Location.query.filter_by(id=id).one()
+        return LocationSchema().dump(obj)

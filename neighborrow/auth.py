@@ -1,25 +1,21 @@
+from flask import request
 from flask_jwt_extended import (create_access_token, create_refresh_token, jwt_required, jwt_refresh_token_required, get_jwt_identity, get_raw_jwt)
 from flask_restful import Resource, reqparse
 
+from .schemas import UserSchema
 from .models import User, RevokedToken
 
 
-signup_parser = reqparse.RequestParser()
-signup_parser.add_argument('first_name', required=False)
-signup_parser.add_argument('last_name', required=False)
-signup_parser.add_argument('email', help='This field annot be blank.', required=True)
-signup_parser.add_argument('password', help='This field cannot be blank.', required=True)
-
 login_parser = reqparse.RequestParser()
-login_parser.add_argument('email', help='This field annot be blank.', required=True)
+login_parser.add_argument('email', help='This field cannot be blank.', required=True)
 login_parser.add_argument('password', help='This field cannot be blank.', required=True)
 
 
 class UserSignUpView(Resource):
     def post(self):
-        data = signup_parser.parse_args()
-        password = data.pop('password')
-        user = User(**data, password=User.generate_hash(password))
+        schema = UserSchema()
+        data = request.get_json()
+        user = schema.load(data)
 
         try:
             user.save_to_db()

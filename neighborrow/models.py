@@ -73,8 +73,9 @@ class Location(NModel):
 
     @property
     def coords(self):
-        point = to_shape(self.geom)
-        return [point.x, point.y]
+        if self.geom is not None:
+            point = to_shape(self.geom)
+            return [point.x, point.y]
 
 
 class Item(NModel, TimestampMixin):
