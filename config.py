@@ -7,6 +7,7 @@ class Config():
     DEBUG = False
     TESTING = False
     CSRF_ENABLED = True
+    # FLASK_ADMIN_SWATCH = 'cerulean'
 
 
 class ProductionConfig(Config):
