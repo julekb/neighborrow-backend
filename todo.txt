@@ -12,3 +12,5 @@
 13. fix python project structure
 14. reorganize into application-based structure
 15. schema validation
+16. admin panel
+17. items hierarchy

@@ -2,7 +2,7 @@ from flask import current_app as app
 from flask import request
 
 from flask_jwt_extended import jwt_refresh_token_required, get_jwt_identity
-from flask_restful import Resource, reqparse
+from flask_restful import Resource
 
 from .models import db, Item, User, Location
 from .schemas import UserSchema, ItemSchema, LocationSchema
@@ -17,12 +17,6 @@ def get_user():
 def make_shell_context():
     print('Welcome to (s)hell.')
     return {'db': db, 'User': User, 'Item': Item, 'Location': Location}
-
-
-location_parser = reqparse.RequestParser()
-location_parser.add_argument('address', required=True)
-location_parser.add_argument('lon', required=True)
-location_parser.add_argument('lat', required=True)
 
 
 class UserSelfView(Resource):
