@@ -54,7 +54,11 @@ class ItemListView(Resource):
 
 class LocationView(Resource):
     def get(self):
-        locations = Location.query.all()
+        data = request.get_json(force=True)
+        if 'lat' in data and 'lon' in data:
+            locations = Location.get_in_range(lat=data['lat'], lon=data['lon'])
+        else:
+            locations = Location.query.all()
         out = LocationSchema(many=True).dump(locations)
         return out
 

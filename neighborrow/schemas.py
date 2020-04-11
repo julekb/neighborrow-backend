@@ -52,13 +52,15 @@ class CoordsField(fields.Field):
 
 class LocationSchema(ma.Schema):
     class Meta:
-        fields = ('id', 'address', 'lon', 'lat', 'coords')
+        fields = ('id', 'address', 'lon', 'lat', 'coords', 'distance')
         ordered = True
 
     address = fields.String(required=True)
     lon = fields.Float(required=True)
     lon = fields.Float(required=True)
+
     coords = CoordsField(write_only=True)
+    distance = fields.Float(write_only=True)
 
     @post_load
     def create(self, data, **kwargs):

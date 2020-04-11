@@ -4,7 +4,7 @@ from . import db
 from .core import NModel, TimestampMixin
 
 from flask_login import UserMixin
-from geoalchemy2 import Geometry
+from geoalchemy2 import Geometry, func
 from geoalchemy2.elements import WKTElement
 from geoalchemy2.shape import to_shape
 from passlib.hash import pbkdf2_sha256 as sha256
@@ -62,11 +62,11 @@ class User(NModel,
 class Location(NModel):
     __tablename__ = 'locations'
     id = db.Column(db.Integer, primary_key=True)
-    geom = db.Column(Geometry(geometry_type='POINT', srid=4326))
+    geom = db.Column(Geometry(geometry_type='POINT'))
     address = db.Column(db.String(1024))
 
     def __init__(self, lon, lat, *args, **kwargs):
-        geom = WKTElement('POINT(%s %s)' % (lon, lat), srid=4326)
+        geom = WKTElement('POINT(%s %s)' % (lon, lat))
         kwargs['geom'] = geom
 
         return super(Location, self).__init__(*args, **kwargs)
@@ -76,6 +76,16 @@ class Location(NModel):
         if self.geom is not None:
             point = to_shape(self.geom)
             return [point.x, point.y]
+
+    @classmethod
+    def get_in_range(cls, lon, lat):
+        def process(qs):
+            for obj, distance in qs:
+                obj.distance = distance
+                yield obj
+        point = WKTElement('POINT(%s %s)' % (lon, lat))
+        qs = db.session.query(Location, func.ST_Distance_Shpere(Location.geom, point).label('distance')).order_by('distance')
+        return process(qs)
 
 
 class Item(NModel, TimestampMixin):
