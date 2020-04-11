@@ -16,3 +16,4 @@
 17. items hierarchy
 18. tests
 19. coverage
+20. Geography type is  better and more precise than Geometry but it's annoying to to set up

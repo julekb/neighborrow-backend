@@ -81,10 +81,11 @@ class Location(NModel):
     def get_in_range(cls, lon, lat):
         def process(qs):
             for obj, distance in qs:
-                obj.distance = distance
+                obj.distance = distance * 90000  # this is extremely inaccurate
                 yield obj
+
         point = WKTElement('POINT(%s %s)' % (lon, lat))
-        qs = db.session.query(Location, func.ST_Distance_Shpere(Location.geom, point).label('distance')).order_by('distance')
+        qs = db.session.query(Location, func.ST_Distance(Location.geom, point).label('distance')).order_by('distance')
         return process(qs)
 
 

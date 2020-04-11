@@ -17,10 +17,10 @@ class CoordsGenerator:
         self.dev = dev
 
     def generate_lat(self):
-        return self.coords[0] + uniform(-1, 1)
+        return self.coords[0] + uniform(-0.1, 0.1)
 
     def generate_lon(self):
-        return self.coords[1] + uniform(-1, 1)
+        return self.coords[1] + uniform(-0.1, 0.1)
 
 
 class ModelFactory:
