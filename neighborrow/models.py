@@ -91,10 +91,6 @@ class Item(NModel, TimestampMixin):
     owner_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     owner = relationship('User', back_populates='items')
 
-    def __init__(self, name, price):
-        self.name = name
-        self.price = price
-
     def __repr__(self):
         return f"Item {self.name}"
 
