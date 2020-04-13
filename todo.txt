@@ -17,3 +17,5 @@
 18. tests
 19. coverage
 20. Geography type is  better and more precise than Geometry but it's annoying to to set up
+21. test python migrations
+22. https://pythonhosted.org/Flask-Cache/ ?

@@ -37,6 +37,6 @@ def create_app():
         return RevokedToken.is_jti_blacklisted(jti)
 
     with app.app_context():
-        from . import routes
+        from . import routes, commands
 
         return app

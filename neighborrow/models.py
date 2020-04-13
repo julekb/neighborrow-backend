@@ -45,7 +45,7 @@ class User(NModel,
     phone = db.Column(db.Integer)
 
     items = relationship('Item', back_populates='owner')
-    rented = relationship('Item', secondary='rentals')
+    rented = relationship('Item', secondary='transactions')
 
     def __repr__(self, *args, **kwargs):
         return f'User {self.id}: {self.first_name} {self.last_name}'
@@ -98,7 +98,7 @@ class Item(NModel, TimestampMixin):
     price = db.Column(db.Integer())
     added_date = db.Column(db.DateTime, default=dt.datetime.utcnow())
 
-    rentals = relationship('User', secondary='rentals')
+    transactions = relationship('User', secondary='transactions')
     owner_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     owner = relationship('User', back_populates='items')
 
@@ -110,8 +110,8 @@ class Item(NModel, TimestampMixin):
         return True
 
 
-class Rental(NModel):
-    __tablename__ = 'rentals'
+class Transaction(NModel):
+    __tablename__ = 'transactions'
 
     id = db.Column(db.Integer, primary_key=True)
     start_date = db.Column(db.DateTime, default=dt.datetime.utcnow())
