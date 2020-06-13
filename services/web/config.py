@@ -22,7 +22,7 @@ class StagingConfig(Config):
 class DevelopmentConfig(Config):
     DEVELOPMENT = True
     DEBUG = True
-    SQLALCHEMY_DATABASE_URI = "postgresql://neighborrow:pass@localhost:5432/neighborrow"
+    SQLALCHEMY_DATABASE_URI = "postgresql://neighborrow:pass@db:5432/neighborrow"
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_ECHO = False  # set true to log db access
 

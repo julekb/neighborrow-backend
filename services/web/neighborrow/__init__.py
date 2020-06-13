@@ -21,8 +21,8 @@ def create_app():
     migrate = Migrate(app, db)
 
     admin_panel = Admin(app, name='Neighborrow', template_mode='bootstrap3')
-    from .admin import UserAdmin
-    admin_panel.add_view(UserAdmin(db.session))
+    # from .admin import UserAdmin
+    # admin_panel.add_view(UserAdmin(db.session))
     # admin.add_view(ItemAdmin)
     # admin.add_view(LocationAdmin)
 

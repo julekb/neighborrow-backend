@@ -1,14 +1,16 @@
 # Setup
 
-### Create database
+Install docker, docker-compose
 
-* install PostgreSQL and open `sudo su -postgres`
-* install PostGIS, i.e. with `brew install postgis`
-* `create database neighborrow;`
-* `create user neighborrow with superuser password 'pass';`
-* Install extensions
-`create extension postgis;`
+Builds, (re)creates, starts, and attaches to containers for a service.
+``` bash
+docker-compose up -d
+```
 
+Stops containers and removes containers, networks, volumes, and images created by up.
+``` bash
+docker-compose down
+```
 
 # Info
 

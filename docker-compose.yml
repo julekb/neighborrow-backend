@@ -1,0 +1,23 @@
+version: '3.3'
+
+services:
+  web:
+    build: ./services/web
+    command: python wsgi.py
+    volumes:
+      - ./services/web/:/usr/src/app/
+    ports:
+      - 5000:5000
+    env_file:
+      - ./.env.dev
+  db:
+    image: kartoza/postgis
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER=neighborrow
+      - POSTGRES_PASSWORD=pass
+      - POSTGRES_DB=neighborrow
+
+volumes:
+  postgres_data:
